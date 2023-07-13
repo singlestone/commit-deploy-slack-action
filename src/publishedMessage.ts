@@ -16,7 +16,7 @@ export const publishedMessage = (
       Blocks.Section({
         text: dedent`
         ${Md.emoji(
-          "ship"
+          "rocket"
         )} A new ${linkToCommit} of ${linkToRepo} has been deployed!
       `,
       })
