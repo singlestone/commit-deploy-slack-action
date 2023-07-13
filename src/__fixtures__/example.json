@@ -1,0 +1,12 @@
+{
+  "as_user": true,
+  "blocks": [
+    {
+      "type": "section",
+      "text": {
+        "type": "mrkdwn",
+        "text": ":ship: A new <https://github.com/test/test/commit/123|version> of <https://github.com/test/test|test/test> has been deployed!"
+      }
+    }
+  ]
+}

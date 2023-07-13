@@ -1,0 +1,156 @@
+name: 🔄 CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request: {}
+
+permissions:
+  actions: write
+  contents: write
+
+jobs:
+  lint:
+    name: ⬣ ESLint
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🛑 Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.11.0
+
+      - name: ⬇️ Checkout repo
+        uses: actions/checkout@v3
+
+      - name: 📥 Install pnpm
+        uses: pnpm/action-setup@v2.2.4
+
+      - name: 📥 Use Node.js from .nvmrc
+        uses: actions/setup-node@v3
+        with:
+          cache: "pnpm"
+          node-version-file: ".nvmrc"
+
+      - name: 📥 Install via pnpm
+        run: pnpm install
+        shell: bash
+
+      - name: 🔬 Lint
+        run: pnpm run lint
+
+  prettier:
+    name: 🔎 Prettier
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🛑 Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.11.0
+
+      - name: ⬇️ Checkout repo
+        uses: actions/checkout@v3
+
+      - name: 📥 Install pnpm
+        uses: pnpm/action-setup@v2.2.4
+
+      - name: 📥 Use Node.js from .nvmrc
+        uses: actions/setup-node@v3
+        with:
+          cache: "pnpm"
+          node-version-file: ".nvmrc"
+
+      - name: 📥 Install via pnpm
+        run: pnpm install
+        shell: bash
+
+      - name: ❤️ Run format:check
+        run: pnpm run format:check
+
+  test:
+    name: ⚡ Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🛑 Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.11.0
+
+      - name: ⬇️ Checkout repo
+        uses: actions/checkout@v3
+
+      - name: 📥 Install pnpm
+        uses: pnpm/action-setup@v2.2.4
+
+      - name: 📥 Use Node.js from .nvmrc
+        uses: actions/setup-node@v3
+        with:
+          cache: "pnpm"
+          node-version-file: ".nvmrc"
+
+      - name: 📥 Install via pnpm
+        run: pnpm install
+        shell: bash
+
+      - name: ⚡ Run tests
+        run: pnpm run test
+
+  integration-test:
+    name: ⚡ Integration Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🛑 Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.11.0
+
+      - name: ⬇️ Checkout repo
+        uses: actions/checkout@v3
+
+      - name: 📥 Install pnpm
+        uses: pnpm/action-setup@v2.2.4
+
+      - name: 📥 Use Node.js from .nvmrc
+        uses: actions/setup-node@v3
+        with:
+          cache: "pnpm"
+          node-version-file: ".nvmrc"
+
+      - name: 📥 Install via pnpm
+        run: pnpm install
+        shell: bash
+
+      - name: 🏠 Run build
+        run: pnpm run build
+
+      - name: ⚡ Run integration tests
+        uses: ./
+        with:
+          dryRun: true
+          slackWebhook: "invalid-slack-webhook"
+
+  release:
+    name: 🚀 Release
+    runs-on: ubuntu-latest
+    needs: [lint, prettier, test, integration-test]
+    if: ${{ github.ref == 'refs/heads/main' && github.event_name == 'push' }}
+    steps:
+      - name: 🛑 Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.11.0
+
+      - name: ⬇️ Checkout repo
+        uses: actions/checkout@v3
+        with:
+          # This makes Actions fetch all Git history so that release-it can generate changelogs with the correct commits
+          fetch-depth: 0
+
+      - name: 📥 Install pnpm
+        uses: pnpm/action-setup@v2.2.4
+
+      - name: 📥 Use Node.js from .nvmrc
+        uses: actions/setup-node@v3
+        with:
+          cache: "pnpm"
+          node-version-file: ".nvmrc"
+
+      - name: 📥 Install via pnpm
+        run: pnpm install
+        shell: bash
+
+      - name: 🚀 Semantic Release
+        run: pnpm dlx semantic-release
+        env:
+          GH_TOKEN: ${{ secrets.TAG_PAT }}
+          GITHUB_TOKEN: ${{ secrets.TAG_PAT }}

@@ -1,0 +1,21 @@
+name: Commit Deploy Slack
+description: A GitHub Action to publish to Slack after a deployment
+author: "Richard Harrah"
+inputs:
+  dryRun:
+    description: "Should this be performed as a dry run?"
+    required: false
+    default: "false"
+  linkRoot:
+    description: "Root of link to repository"
+    required: false
+    default: "https://github.com"
+  message:
+    description: "Message to be additionally published to Slack"
+    required: false
+  slackWebhook:
+    description: "Slack webhook to which notifications will be sent."
+    required: true
+runs:
+  using: "node16"
+  main: "dist/index.js"
