@@ -17,6 +17,9 @@ inputs:
   slackWebhook:
     description: "Slack webhook to which notifications will be sent."
     required: true
+  additionalPlaceholders:
+    description: "Additional placeholders to make available for message use. Should be a multi-line string with keys separated from values by a =."
+    required: false
 runs:
   using: "node16"
   main: "dist/index.js"

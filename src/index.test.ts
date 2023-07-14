@@ -23,6 +23,7 @@ it("creates a templated Slack message", () => {
     JSON.parse(
       asSlackMessage(
         templateMessage({
+          additionalPlaceholders: {},
           configMessage:
             ":rocket: A new [[@linkify(it.links.commitSha, 'version') /]] of [[@linkify(it.links.repository, it.repository) /]] has been deployed!",
           github: fakeGitHubContext,

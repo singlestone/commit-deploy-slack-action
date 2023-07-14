@@ -112,6 +112,9 @@ jobs:
         with:
           dryRun: true
           slackWebhook: "invalid-slack-webhook"
+          additionalPlaceholders: |
+            non-production=https://google.com
+          message: ":rocket: A new [[@linkify(it.links.commitSha, 'version') /]] of [[@linkify(it.links.repository, it.repository) /]] has been deployed to [[@linkify(it['non-production'], 'non-production') /]]!"
 
   release:
     name: 🚀 Release
