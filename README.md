@@ -1,4 +1,4 @@
-# Changesets Publish Slack Action
+# Commit Deploy Slack Action
 
 GitHub Action to publish messages to a Slack webhook after publishing packages with [Changesets].
 
@@ -19,33 +19,28 @@ jobs:
     name: Release
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Repo
-        uses: actions/checkout@v3
-
-      - name: Setup Node.js 16.x
-        uses: actions/setup-node@v3
+      - name: Send a Slack notification
         with:
-          node-version: 16.x
-
-      - name: Install Dependencies
-        run: yarn
-
-      - name: Create Release Pull Request or Publish to npm
-        id: changesets
-        uses: changesets/action@v1
-        with:
-          # This expects you to have a script called release which does a build for your packages and calls changeset publish
-          publish: yarn release
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-      - name: Send a Slack notification if a publish happens
-        uses: ToppleTheNun/changesets-slack-publish-action@v1
-        if: steps.changesets.outputs.published == 'true'
-        with:
-          publishedPackages: ${{ steps.changesets.outputs.publishedPackages }}
           slackWebhook: ${{ secrets.SLACK_WEBHOOK }}
 ```
 
-[Changesets]: https://github.com/changesets/changesets
+## Message Customization
+
+By default, a message like the below will be used. You can override this by providing a `message` configuration value.
+We use [squirrelly](https://squirrelly.js.org/) as the templating engine with `[[` and `]]` as delimiters.
+
+![A new version of singlestone/team-insights-ui has been deployed!](./img/message.png)
+
+### Helpers
+
+- `@linkify`: Helps with building links to things. Example: `@linkify('https://google.com')`
+  - Input:
+    - `url`: **mandatory** - obviously the URL you want to link to :)
+    - `text`: **optional** - what text you want to show instead of just the link text
+
+### Supported placeholders
+
+- `it.github.*`: You can get everything off of the regular GitHub context provided to GitHub actions.
+- `it.repository`: The shorthand name for the repo (e.g., `singlestone/commit-deploy-slack-action`)
+- `it.links.commitSha`: Link to the commit that triggered this action.
+- `it.links.repository`: Link to the repository that triggered this action.

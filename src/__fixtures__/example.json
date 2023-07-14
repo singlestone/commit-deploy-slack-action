@@ -5,7 +5,7 @@
       "type": "section",
       "text": {
         "type": "mrkdwn",
-        "text": ":rocket: A new <https://github.com/test/test/commit/123|version> of <https://github.com/test/test|test/test> has been deployed!"
+        "text": "test"
       }
     }
   ]

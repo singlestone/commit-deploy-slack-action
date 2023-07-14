@@ -1,6 +1,10 @@
 {
-  "extends": "@tsconfig/node-lts-strictest/tsconfig.json",
+  "extends": [
+    "@tsconfig/node-lts/tsconfig.json",
+    "@tsconfig/strictest/tsconfig.json"
+  ],
   "compilerOptions": {
+    "moduleResolution": "bundler",
     "resolveJsonModule": true
   }
 }
