@@ -1,6 +1,6 @@
 # Commit Deploy Slack Action
 
-GitHub Action to publish messages to a Slack webhook after publishing packages with [Changesets].
+GitHub Action to publish messages to a Slack webhook after a deployment.
 
 ## Example Workflow
 
