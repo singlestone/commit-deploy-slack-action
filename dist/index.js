@@ -24708,6 +24708,20 @@ const notifySlackWebhook = async (webhookUrl, message) => {
     });
 };
 
+;// CONCATENATED MODULE: ./src/reducers.ts
+const reduceAdditionalPlaceholders = (multilineInput) => multilineInput.reduce((acc, input) => {
+    const indexOfFirstEquals = input.indexOf("=");
+    if (indexOfFirstEquals < 0) {
+        return acc;
+    }
+    const key = input.substring(0, indexOfFirstEquals);
+    const value = input.substring(indexOfFirstEquals + 1);
+    if (!key) {
+        return acc;
+    }
+    return { ...acc, [key]: value };
+}, {});
+
 ;// CONCATENATED MODULE: ./src/sqrl/filters.ts
 const registerFilters = () => { };
 const filters_unregisterFilters = () => { };
@@ -24760,6 +24774,7 @@ const templateMessage = (params) => {
         github: params.github,
         links,
         repository,
+        ...params.additionalPlaceholders,
     }, {
         tags: ["[[", "]]"],
     });
@@ -24772,13 +24787,17 @@ const templateMessage = (params) => {
 
 
 
+
 (async () => {
     register();
     const dryRun = core.getBooleanInput("dryRun");
     const webhook = core.getInput("slackWebhook", { required: true });
     const configMessage = core.getInput("message");
     const linkRoot = core.getInput("linkRoot") || "https://github.com";
+    const additionalPlaceholdersAsArray = core.getMultilineInput("additionalPlaceholders");
+    const additionalPlaceholders = reduceAdditionalPlaceholders(additionalPlaceholdersAsArray);
     const templatedMessage = templateMessage({
+        additionalPlaceholders,
         configMessage,
         github: github.context,
         linkRoot,
@@ -24789,7 +24808,7 @@ const templateMessage = (params) => {
     }
     else {
         console.log("Dry run enabled, printing message instead!");
-        console.log(message);
+        console.log(message.buildToJSON());
     }
 })().catch((e) => {
     console.error(e);
