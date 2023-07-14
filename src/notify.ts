@@ -1,12 +1,12 @@
-import fetch from "node-fetch";
+import { ofetch } from "ofetch";
 
 export const notifySlackWebhook = async (
   webhookUrl: string,
-  message: string
+  message: string,
 ) => {
-  const response = await fetch(webhookUrl, {
+  return ofetch(webhookUrl, {
     method: "POST",
     body: message,
+    responseType: "text",
   });
-  return response.text();
 };

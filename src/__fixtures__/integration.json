@@ -1,0 +1,12 @@
+{
+  "as_user": true,
+  "blocks": [
+    {
+      "type": "section",
+      "text": {
+        "type": "mrkdwn",
+        "text": ":rocket: A new <https://github.com/singlestone/commit-deploy-slack-action/commit/test|version> of <https://github.com/singlestone/commit-deploy-slack-action|singlestone/commit-deploy-slack-action> has been deployed!"
+      }
+    }
+  ]
+}

@@ -1,23 +1,25 @@
 import * as core from "@actions/core";
 import * as github from "@actions/github";
 
-import { notifySlackWebhook } from "./notify";
-import { publishedMessage } from "./publishedMessage";
+import { asSlackMessage } from "./as-slack-message.js";
+import { notifySlackWebhook } from "./notify.js";
+import { register } from "./sqrl/register.js";
+import { templateMessage } from "./template-message.js";
 
 (async () => {
+  register();
+
   const dryRun = core.getBooleanInput("dryRun");
   const webhook = core.getInput("slackWebhook", { required: true });
   const configMessage = core.getInput("message");
   const linkRoot = core.getInput("linkRoot") || "https://github.com";
 
-  const commitSha = github.context.sha;
-  const repo = `${github.context.repo.owner}/${github.context.repo.repo}`;
-  const message = publishedMessage(
+  const templatedMessage = templateMessage({
     configMessage,
-    commitSha,
-    `${linkRoot}/${repo}`,
-    repo
-  );
+    github: github.context,
+    linkRoot,
+  });
+  const message = asSlackMessage(templatedMessage);
 
   if (!dryRun) {
     await notifySlackWebhook(webhook, message.buildToJSON());

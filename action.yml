@@ -13,6 +13,7 @@ inputs:
   message:
     description: "Message to be additionally published to Slack"
     required: false
+    default: ":rocket: A new [[@linkify(it.links.commitSha, 'version') /]] of [[@linkify(it.links.repository, it.repository) /]] has been deployed!"
   slackWebhook:
     description: "Slack webhook to which notifications will be sent."
     required: true
