@@ -19033,7 +19033,7 @@ const publishedMessage = (configMessage, commitSha, repoLink, repoShorthand) => 
         .asUser()
         .blocks(slack_block_builder_1.Blocks.Section({
         text: (0, ts_dedent_1.default) `
-        ${slack_block_builder_1.Md.emoji("ship")} A new ${linkToCommit} of ${linkToRepo} has been deployed!
+        ${slack_block_builder_1.Md.emoji("rocket")} A new ${linkToCommit} of ${linkToRepo} has been deployed!
       `,
     }));
     if (configMessage) {
