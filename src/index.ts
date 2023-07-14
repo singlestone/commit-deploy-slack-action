@@ -3,6 +3,7 @@ import * as github from "@actions/github";
 
 import { asSlackMessage } from "./as-slack-message.js";
 import { notifySlackWebhook } from "./notify.js";
+import { reduceAdditionalPlaceholders } from "./reducers.js";
 import { register } from "./sqrl/register.js";
 import { templateMessage } from "./template-message.js";
 
@@ -13,8 +14,15 @@ import { templateMessage } from "./template-message.js";
   const webhook = core.getInput("slackWebhook", { required: true });
   const configMessage = core.getInput("message");
   const linkRoot = core.getInput("linkRoot") || "https://github.com";
+  const additionalPlaceholdersAsArray = core.getMultilineInput(
+    "additionalPlaceholders",
+  );
+  const additionalPlaceholders = reduceAdditionalPlaceholders(
+    additionalPlaceholdersAsArray,
+  );
 
   const templatedMessage = templateMessage({
+    additionalPlaceholders,
     configMessage,
     github: github.context,
     linkRoot,
@@ -25,7 +33,7 @@ import { templateMessage } from "./template-message.js";
     await notifySlackWebhook(webhook, message.buildToJSON());
   } else {
     console.log("Dry run enabled, printing message instead!");
-    console.log(message);
+    console.log(message.buildToJSON());
   }
 })().catch((e) => {
   console.error(e);

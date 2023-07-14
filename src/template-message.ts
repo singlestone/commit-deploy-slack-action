@@ -2,6 +2,7 @@ import { context } from "@actions/github";
 import { render } from "squirrelly";
 
 interface TemplateMessageParams {
+  additionalPlaceholders: Record<string, string>;
   configMessage: string;
   github: typeof context;
   linkRoot: string;
@@ -21,6 +22,7 @@ export const templateMessage = (params: TemplateMessageParams): string => {
       github: params.github,
       links,
       repository,
+      ...params.additionalPlaceholders,
     },
     {
       tags: ["[[", "]]"],
