@@ -24769,6 +24769,13 @@ const templateMessage = (params) => {
     const links = {
         commitSha: [params.linkRoot, repository, "commit", params.github.sha].join("/"),
         repository: [params.linkRoot, repository].join("/"),
+        run: [
+            params.linkRoot,
+            repository,
+            "actions",
+            "runs",
+            params.github.runId,
+        ].join("/"),
     };
     return (0,squirrelly_cjs/* render */.sY)(params.configMessage, {
         github: params.github,
