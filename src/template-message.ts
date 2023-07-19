@@ -14,6 +14,13 @@ export const templateMessage = (params: TemplateMessageParams): string => {
       "/",
     ),
     repository: [params.linkRoot, repository].join("/"),
+    run: [
+      params.linkRoot,
+      repository,
+      "actions",
+      "runs",
+      params.github.runId,
+    ].join("/"),
   };
 
   return render(

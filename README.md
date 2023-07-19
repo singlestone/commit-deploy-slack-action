@@ -44,6 +44,7 @@ We use [squirrelly](https://squirrelly.js.org/) as the templating engine with `[
 - `it.repository`: The shorthand name for the repo (e.g., `singlestone/commit-deploy-slack-action`)
 - `it.links.commitSha`: Link to the commit that triggered this action.
 - `it.links.repository`: Link to the repository that triggered this action.
+- `it.links.run`: Link to the GitHub Actions run that triggered this action.
 
 ### Additional placeholders
 
